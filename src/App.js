@@ -13,7 +13,7 @@ class Available extends React.Component{
         <p> available actions</p>
         <dl>
           <dt>
-            <button className="rotate">
+            <button className="rotate2">
               rotate
             </button>
           </dt>
@@ -98,17 +98,25 @@ class ImageUpload extends React.Component {
     reader.readAsDataURL(file)
   }
 
+
   render() {
+    let applied_func = 'rotate';
+
+
+
     let {imagePreviewUrl} = this.state;
     let $imagePreview = null;
     if (imagePreviewUrl) {
       $imagePreview = (<img src={imagePreviewUrl} alt="" />);
     } else {
-      $imagePreview = (<div className="image_display">
+      $imagePreview = (<div className={applied_func}>
         <img src={noImage} className="image_dis" alt="no image"
         ref={(img) => {this.imageTag = img;}} />
       </div>);
     }
+
+
+
 
     return (
       <div className="previewComponent">
@@ -129,12 +137,15 @@ class ImageUpload extends React.Component {
 class Application extends React.Component {
   constructor(props) {
     super(props);
-    this.state={ hidden: false }
+    this.state={ rotate:false }
   }
-  handleClick() {
+  handleClick(func) {
+    if(func==="rotation"){
     this.setState({
-      hidden:!this.state.hidden
+      rotate:!this.state.rotate
       })
+}
+
   }
   render() {
     return<div className="edit">
@@ -142,8 +153,8 @@ class Application extends React.Component {
               <p>Available Actions</p>
               <dl>
                 <dt>
-                <button className={(!this.state.hidden)? '' : 'hidden'}
-                   onClick={() => this.handleClick()}>
+                <button className={(!this.state.rotate)? '' : 'hidden'}
+                   onClick={() => this.handleClick("rotation")}>
                      rotate
                 </button>
                 </dt>
@@ -154,8 +165,8 @@ class Application extends React.Component {
               <p> Applied Actions</p>
               <dl>
                 <dt>
-                  <button className={(this.state.hidden)? '' : 'hidden'}
-                     onClick={() => this.handleClick()}>
+                  <button className={(this.state.rotate)? '' : 'hidden'}
+                     onClick={() => this.handleClick("rotation")}>
                        rotated
                   </button>
                 </dt>

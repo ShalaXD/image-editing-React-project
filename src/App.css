@@ -44,18 +44,13 @@ img{
   width: 150px;
 }
 
-.before {
-
-}
-
-.after {
-  transform: rotate(45deg);
-}
-
-.opacity{
-  margin-left:100px;
-}
-
 .hidden{
   display: none;
+}
+
+.rotate{
+  transform: rotate(45deg);
+}
+.opacity{
+  opacity: 0.5;
 }
