@@ -19,16 +19,14 @@
 }
 
 
-.overall,.image, .editing,.available,.applied {
+.overall,.image,.available,.applied {
   margin:20pt ;
   float: left;
 }
 
+
 .overall {
   width:800px;
-}
-.reset{
-  float: right;
 }
 
 button {

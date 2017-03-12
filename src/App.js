@@ -6,72 +6,28 @@ import './App.css';
 // textInput must be declared here so the ref callback can refer to it
 //let textInput = null;
 
-class Available extends React.Component{
-  render(){
-    return (
-        <div className="available">
-        <p> available actions</p>
-        <dl>
-          <dt>
-            <button className="rotate2">
-              rotate
-            </button>
-          </dt>
-          <dt>
-            <button className="translate">
-              translate
-            </button>
-          </dt>
-          <dt>
-            <button className="opacity">
-              opacity
-            </button>
-          </dt>
-        </dl>
-        </div>
-    )
-  }
-}
-
-class Applied extends React.Component {
-  render(){
-    return (
-      <div className="applied">
-        <p> applied actions</p>
-        <dl>
-          <dt>
-            <button className="scale">
-              scale
-            </button>
-          </dt>
-        </dl>
-      </div>
-    );
-  }
-}
-
 class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state={ rotate:false }
+    this.changeHandler = this.changeHandler.bind(this);
+  }
+  changeHandler(state) {
+    this.setState(state);
+  }
   render() {
     return (
       <div className="overall">
         <div className="image">
-          <ImageUpload />
+          <ImageUpload rotate={this.state.rotate} />
         </div>
+        <div className="editing">
+          <Application onChange={this.changeHandler}/>
 
-        <div ClassName="edit">
-          <Available />
-          <Applied />
-          <button className="reset">
-            reset
-          </button>
         </div>
-
         <button className="reset">
           reset
         </button>
-        <div className="editing">
-          <Application />
-        </div>
     </div>
     )
   }
@@ -82,13 +38,10 @@ class ImageUpload extends React.Component {
     super(props);
     this.state = {file: '',imagePreviewUrl: ''};
   }
-
   handleImageChange(e) {
     e.preventDefault();
-
     let reader = new FileReader();
     let file = e.target.files[0];
-
     reader.onloadend = () => {
       this.setState({
         file: file,
@@ -97,14 +50,10 @@ class ImageUpload extends React.Component {
     }
     reader.readAsDataURL(file)
   }
-
-
   render() {
-    let applied_func = 'rotate';
+    let applied_func = this.props.rotate ? 'rotate' : '';
 
-
-
-    let {imagePreviewUrl} = this.state;
+    let {imagePreviewUrl, file} = this.state;
     let $imagePreview = null;
     if (imagePreviewUrl) {
       $imagePreview = (<img src={imagePreviewUrl} alt="" />);
@@ -114,10 +63,6 @@ class ImageUpload extends React.Component {
         ref={(img) => {this.imageTag = img;}} />
       </div>);
     }
-
-
-
-
     return (
       <div className="previewComponent">
       <div className="imgPreview">
@@ -141,11 +86,9 @@ class Application extends React.Component {
   }
   handleClick(func) {
     if(func==="rotation"){
-    this.setState({
-      rotate:!this.state.rotate
-      })
-}
-
+      this.setState({rotate:!this.state.rotate})
+      this.props.onChange({rotate : !this.state.rotate});
+    }
   }
   render() {
     return<div className="edit">
@@ -153,12 +96,11 @@ class Application extends React.Component {
               <p>Available Actions</p>
               <dl>
                 <dt>
-                <button className={(!this.state.rotate)? '' : 'hidden'}
-                   onClick={() => this.handleClick("rotation")}>
-                     rotate
-                </button>
+                  <button className={(!this.state.rotate)? '' : 'hidden'}
+                     onClick={() => this.handleClick("rotation")}>
+                       rotate
+                  </button>
                 </dt>
-
               </dl>
             </div>
             <div className="applied">
