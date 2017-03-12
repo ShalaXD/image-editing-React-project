@@ -22,7 +22,7 @@ class App extends Component {
           <ImageUpload rotate={this.state.rotate} />
         </div>
         <div className="editing">
-          <Application onChange={this.changeHandler}/>
+          <Application onChange={this.changeHandler} rotate={this.state.rotate} />
 
         </div>
         <button className="reset">
@@ -82,12 +82,10 @@ class ImageUpload extends React.Component {
 class Application extends React.Component {
   constructor(props) {
     super(props);
-    this.state={ rotate:false }
   }
   handleClick(func) {
     if(func==="rotation"){
-      this.setState({rotate:!this.state.rotate})
-      this.props.onChange({rotate : !this.state.rotate});
+      this.props.onChange({rotate : !this.props.rotate});
     }
   }
   render() {
@@ -96,7 +94,7 @@ class Application extends React.Component {
               <p>Available Actions</p>
               <dl>
                 <dt>
-                  <button className={(!this.state.rotate)? '' : 'hidden'}
+                  <button className={(!this.props.rotate)? '' : 'hidden'}
                      onClick={() => this.handleClick("rotation")}>
                        rotate
                   </button>
@@ -107,7 +105,7 @@ class Application extends React.Component {
               <p> Applied Actions</p>
               <dl>
                 <dt>
-                  <button className={(this.state.rotate)? '' : 'hidden'}
+                  <button className={(this.props.rotate)? '' : 'hidden'}
                      onClick={() => this.handleClick("rotation")}>
                        rotated
                   </button>
