@@ -176,12 +176,11 @@ class Application extends React.Component {
                   </button>
                 </dt>
               </dl>
-            </div>
-
-            <div className="resetbutton">
-            <button onClick={() => this.handleClick("resetImage")}>
-              reset
-            </button>
+              <div>
+              <button className="resetbutton" onClick={() => this.handleClick("resetImage")}>
+                reset
+              </button>
+              </div>
             </div>
           </div>;
   }

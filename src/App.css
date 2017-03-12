@@ -1,38 +1,7 @@
-.App {
-  text-align: center;
+.previewComponent,.available,.applied{
+  float:left;
+  margin: 50px;
 }
-
-.overall,.image {
-  margin:25pt ;
-  float: left;
-}
-
-.available,.applied{
-  height: 200px;
-  float: left;
-  margin: 30px;
-}
-
-.resetbutton{
-  float: right;
-}
-
-.choosebutton{
-  margin-top: 20px;
-}
-
-.overall {
-  width:600px;
-}
-
-button {
-  padding-left:5px;
-  margin: 5pt;
-  height: 30px;
-  width: 100px;
-}
-
-
 
 img{
   border: 1px solid #ddd;
@@ -41,20 +10,18 @@ img{
   width: 150px;
 }
 
+button {
+  margin: 5pt;
+  height: 30px;
+  width: 100px;
+  text-align: left;
+}
+
+.resetbutton,.choosebutton{
+  border-radius: 4px;
+  text-align: center;
+}
+
 .hidden{
   opacity:0;
-}
-
-.rotate{
-  transform: rotate(45deg);
-}
-.opacity{
-  opacity: 0.5;
-}
-
-.translate{
-  transform: translate(-40px);
-}
-.scale{
-  transform: scale(0.5);
 }
