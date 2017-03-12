@@ -9,7 +9,7 @@ import './App.css';
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state={ rotate:false }
+    this.state={rotate:false,translate:false,scale:false,opacity:false }
     this.changeHandler = this.changeHandler.bind(this);
   }
   changeHandler(state) {
@@ -19,16 +19,19 @@ class App extends Component {
     return (
       <div className="overall">
         <div className="image">
-          <ImageUpload rotate={this.state.rotate} />
+          <ImageUpload rotate={this.state.rotate}
+                        translate={this.state.translate}
+                        scale={this.state.scale}
+                        opacity={this.state.opacity} />
         </div>
         <div className="editing">
-          <Application onChange={this.changeHandler} rotate={this.state.rotate} />
-
+          <Application onChange={this.changeHandler}
+                        rotate={this.state.rotate}
+                        translate={this.state.translate}
+                        scale={this.state.scale}
+                        opacity={this.state.opacity} />
         </div>
-        <button className="reset">
-          reset
-        </button>
-    </div>
+      </div>
     )
   }
 }
@@ -51,14 +54,27 @@ class ImageUpload extends React.Component {
     reader.readAsDataURL(file)
   }
   render() {
-    let applied_func = this.props.rotate ? 'rotate' : '';
+    let css_transform = ''
+    let css_opacity = ''
+    if (this.props.rotate){
+      css_transform = css_transform+' rotate(45deg)'
+    }
+    if (this.props.translate){
+      css_transform = css_transform+' translate(-40px)'
+    }
+    if (this.props.scale){
+      css_transform = css_transform+' scale(0.5)'
+    }
+    if (this.props.opacity){
+      css_opacity = css_opacity+'0.5'
+    }
 
     let {imagePreviewUrl, file} = this.state;
-    let $imagePreview = null;
+    let imagePreview = null;
     if (imagePreviewUrl) {
-      $imagePreview = (<img src={imagePreviewUrl} alt="" />);
+      imagePreview = (<img src={imagePreviewUrl} style={{ transform: css_transform, opacity:css_opacity }} alt="" />);
     } else {
-      $imagePreview = (<div className={applied_func}>
+      imagePreview = (<div>
         <img src={noImage} className="image_dis" alt="no image"
         ref={(img) => {this.imageTag = img;}} />
       </div>);
@@ -66,12 +82,12 @@ class ImageUpload extends React.Component {
     return (
       <div className="previewComponent">
       <div className="imgPreview">
-        {$imagePreview}
+        {imagePreview}
       </div>
         <input id="fileInput"
           type="file"
           onChange={(e)=>this.handleImageChange(e)} style={{ display: 'none' }} />
-        <button href="#" id="fileSelect">
+        <button href="#" className="choosebutton">
           <label htmlFor="fileInput">Choose Image</label>
         </button>
       </div>
@@ -87,6 +103,18 @@ class Application extends React.Component {
     if(func==="rotation"){
       this.props.onChange({rotate : !this.props.rotate});
     }
+    if(func==="translation"){
+      this.props.onChange({translate : !this.props.translate});
+    }
+    if(func==="scaling"){
+      this.props.onChange({scale : !this.props.scale});
+    }
+    if(func==="opacity_change"){
+      this.props.onChange({opacity : !this.props.opacity});
+    }
+    if(func==="resetImage"){
+      this.props.onChange({rotate:false, translate:false,scale:false, opacity:false});
+    }
   }
   render() {
     return<div className="edit">
@@ -99,8 +127,27 @@ class Application extends React.Component {
                        rotate
                   </button>
                 </dt>
+                <dt>
+                  <button className={(!this.props.translate)? '' : 'hidden'}
+                     onClick={() => this.handleClick("translation")}>
+                       translate
+                  </button>
+                </dt>
+                <dt>
+                  <button className={(!this.props.scale)? '' : 'hidden'}
+                     onClick={() => this.handleClick("scaling")}>
+                       scale
+                  </button>
+                </dt>
+                <dt>
+                  <button className={(!this.props.opacity)? '' : 'hidden'}
+                     onClick={() => this.handleClick("opacity_change")}>
+                       opacity
+                  </button>
+                </dt>
               </dl>
             </div>
+
             <div className="applied">
               <p> Applied Actions</p>
               <dl>
@@ -110,7 +157,31 @@ class Application extends React.Component {
                        rotated
                   </button>
                 </dt>
+                <dt>
+                  <button className={(this.props.translate)? '' : 'hidden'}
+                     onClick={() => this.handleClick("translation")}>
+                       translate
+                  </button>
+                </dt>
+                <dt>
+                  <button className={(this.props.scale)? '' : 'hidden'}
+                     onClick={() => this.handleClick("scaling")}>
+                       scale
+                  </button>
+                </dt>
+                <dt>
+                  <button className={(this.props.opacity)? '' : 'hidden'}
+                     onClick={() => this.handleClick("opacity_change")}>
+                       opacity
+                  </button>
+                </dt>
               </dl>
+            </div>
+
+            <div className="resetbutton">
+            <button onClick={() => this.handleClick("resetImage")}>
+              reset
+            </button>
             </div>
           </div>;
   }

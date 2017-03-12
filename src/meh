@@ -71,4 +71,142 @@
           );
       }
   }
-  
+
+
+
+  class ImageUpload extends React.Component {
+    constructor() {
+      super();
+      this.state = {file: '',imagePreviewUrl: ''};
+    }
+
+    _handleImageChange(e) {
+      e.preventDefault();
+
+      let reader = new FileReader();
+      let file = e.target.files[0];
+
+      reader.onloadend = () => {
+        this.setState({
+          file: file,
+          imagePreviewUrl: reader.result
+        });
+      }
+      reader.readAsDataURL(file)
+    }
+
+    render() {
+      let {imagePreviewUrl} = this.state;
+      let $imagePreview = null;
+      if (imagePreviewUrl) {
+        $imagePreview = (<img src={imagePreviewUrl} alt="" />);
+      } else {
+        $imagePreview = (<div className="image_display">
+          <img src={noImage} className="image_dis" alt="no image"
+          ref={(img) => {this.imageTag = img;}} />
+        </div>);
+      }
+
+      return (
+        <div className="previewComponent">
+        <div className="imgPreview">
+          {$imagePreview}
+        </div>
+          <form >
+            <input className="fileInput"
+              type="file"
+              onChange={(e)=>this._handleImageChange(e)} />
+          </form>
+        </div>
+      )
+    }
+  }
+
+  input[type='file'] {
+    opacity:0
+  }
+
+
+
+In a react way, I would advise to separate concerns:
+
+make your before and after styling in css (and not use inline styles in react), and put the transform, rotate etc in the after-class.
+in your react code, add a click handler to your <img>, which applies the new class to your <img> component
+Example code (where you change class every single time you click) would look something like this:
+
+class Application extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state={ className: 'class1' }
+  }
+  handleClick() {
+    this.setState({
+      className: (this.state.className=='class1')? 'class2' : 'class1'
+    })
+  }
+  render() {
+    return <div>
+      <p className={this.state.className}
+         onClick={() => this.handleClick()}>
+           click me to change color
+      </p>
+    </div>;
+  }
+}
+
+
+if (this.state.head === 'Save') {
+this.setState({
+  head: 'Edit',
+  edit: 'false',
+});
+} else {
+this.setState({
+  head: 'Save',
+  edit: 'true'
+});
+}
+
+
+
+
+class Example extends React.Component {
+  constructor (props) {
+    super(props)
+    this.state = { data: 'test' }
+  }
+  render () {
+    return (
+      <div>
+        <C1 onUpdate={this.onUpdate}/>
+        <C2 data={this.state.data}/>
+      </div>
+    )
+  }
+  onUpdate (data) { this.setState({ data }) }
+}
+
+
+class C1 extends React.Component {
+    render () {
+      return (
+        <div>
+          <input type='text' ref='myInput'/>
+          <input type='button' onClick={this.update } value='Update C2'/>
+        </div>
+      )
+    }
+    update () {
+      this.props.onUpdate(this.refs.myInput.getDOMNode().value)
+    }
+}
+
+class C2 extends React.Component {
+    render () {
+      return <div>{this.props.data}</div>
+    }
+}
+
+
+
+let applied_func = this.props.rotate ? 'rotate' : '';
