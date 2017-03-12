@@ -1,67 +1,7 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+import noImage from './noImage.png'
 import './App.css';
 //import ReactDOM from 'react-dom';
-
-class FileUploader extends Component {
-    constructor() {
-        super();
-        this.handleChange = this.handleChange.bind(this);
-        this.state = { file: false };
-    }
-    handleChange(e) {
-        this.setState({ file: e.target.value });
-    }
-    render(){
-        const image = (this.state.file) ? <img src={this.state.file} alt=""/> : null;
-        return(
-            <div>
-                <input type="file" id="fileElem" multiple accept="image/*"  onChange={this.handleChange} style={{ display: 'none' }} />
-                <button href="#" id="fileSelect">
-                    <label htmlFor="fileElem">Choose Image</label>
-                 </button>
-                <div id="fileList">
-                    {image}
-                </div>
-            </div>
-        );
-    }
-}
-
-class Toggle extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {isToggleOn: true};
-
-    // This binding is necessary to make `this` work in the callback
-    this.handleClick = this.handleClick.bind(this);
-  }
-
-  handleClick() {
-    this.setState(prevState => ({
-      isToggleOn: !prevState.isToggleOn
-    }));
-  }
-
-  render() {
-    return (
-      <button onClick={this.handleClick}>
-        {this.state.isToggleOn ? 'ON' : 'OFF'}
-      </button>
-    );
-  }
-}
-
-class ImageDisplay extends React.Component {
-  render() {
-    return (
-      <div className="image_display">
-        <img src={logo} className="App-logo" alt="logo"
-        ref={(img) => {this.imageTag = img;}}/>
-      </div>
-    )
-  }
-}
 
 // textInput must be declared here so the ref callback can refer to it
 //let textInput = null;
@@ -89,7 +29,6 @@ class Available extends React.Component{
           </dt>
         </dl>
         </div>
-
     )
   }
 }
@@ -115,10 +54,8 @@ class App extends Component {
   render() {
     return (
       <div className="overall">
-        <Toggle />
         <div className="image">
-          <ImageDisplay />
-          <FileUploader />
+          <ImageUpload />
         </div>
 
         <div ClassName="edit">
@@ -132,13 +69,13 @@ class App extends Component {
         <button className="reset">
           reset
         </button>
-        <ImageUpload />
+        <div className="editing">
+          <Application />
+        </div>
     </div>
     )
   }
 }
-
-
 
 class ImageUpload extends React.Component {
   constructor(props) {
@@ -146,13 +83,7 @@ class ImageUpload extends React.Component {
     this.state = {file: '',imagePreviewUrl: ''};
   }
 
-  _handleSubmit(e) {
-    e.preventDefault();
-    // TODO: do something with -> this.state.file
-    console.log('handle uploading-', this.state.file);
-  }
-
-  _handleImageChange(e) {
+  handleImageChange(e) {
     e.preventDefault();
 
     let reader = new FileReader();
@@ -164,7 +95,6 @@ class ImageUpload extends React.Component {
         imagePreviewUrl: reader.result
       });
     }
-
     reader.readAsDataURL(file)
   }
 
@@ -174,27 +104,66 @@ class ImageUpload extends React.Component {
     if (imagePreviewUrl) {
       $imagePreview = (<img src={imagePreviewUrl} alt="" />);
     } else {
-      $imagePreview = (<div className="previewText">Please select an Image for Preview</div>);
+      $imagePreview = (<div className="image_display">
+        <img src={noImage} className="image_dis" alt="no image"
+        ref={(img) => {this.imageTag = img;}} />
+      </div>);
     }
 
     return (
       <div className="previewComponent">
-        <form onSubmit={(e)=>this._handleSubmit(e)}>
-          <input className="fileInput"
-            type="file"
-            onChange={(e)=>this._handleImageChange(e)} />
-          <button className="submitButton"
-            type="submit"
-            onClick={(e)=>this._handleSubmit(e)}>Upload Image</button>
-        </form>
-        <div className="imgPreview">
-          {$imagePreview}
-        </div>
+      <div className="imgPreview">
+        {$imagePreview}
+      </div>
+        <input id="fileInput"
+          type="file"
+          onChange={(e)=>this.handleImageChange(e)} style={{ display: 'none' }} />
+        <button href="#" id="fileSelect">
+          <label htmlFor="fileInput">Choose Image</label>
+        </button>
       </div>
     )
   }
 }
 
+class Application extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state={ hidden: false }
+  }
+  handleClick() {
+    this.setState({
+      hidden:!this.state.hidden
+      })
+  }
+  render() {
+    return<div className="edit">
+            <div className="available">
+              <p>Available Actions</p>
+              <dl>
+                <dt>
+                <button className={(!this.state.hidden)? '' : 'hidden'}
+                   onClick={() => this.handleClick()}>
+                     rotate
+                </button>
+                </dt>
+
+              </dl>
+            </div>
+            <div className="applied">
+              <p> Applied Actions</p>
+              <dl>
+                <dt>
+                  <button className={(this.state.hidden)? '' : 'hidden'}
+                     onClick={() => this.handleClick()}>
+                       rotated
+                  </button>
+                </dt>
+              </dl>
+            </div>
+          </div>;
+  }
+}
 
 
 export default App;

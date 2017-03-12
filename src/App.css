@@ -43,3 +43,19 @@ img{
   padding: 5px;
   width: 150px;
 }
+
+.before {
+
+}
+
+.after {
+  transform: rotate(45deg);
+}
+
+.opacity{
+  margin-left:100px;
+}
+
+.hidden{
+  display: none;
+}
